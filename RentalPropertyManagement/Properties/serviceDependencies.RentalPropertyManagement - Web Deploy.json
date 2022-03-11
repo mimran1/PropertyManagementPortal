@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.onprem",
+      "connectionId": "RentalPropertyManagementContextConnection",
+      "secretStore": "AzureAppSettings"
+    },
+    "storage1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/rentalpropertymgnmtlog",
+      "type": "storage.azure",
+      "connectionId": "RentalPropertyManagementStorage",
+      "secretStore": "AzureAppSettings"
+    }
+  }
+}

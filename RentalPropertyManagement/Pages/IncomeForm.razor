@@ -1,0 +1,114 @@
+﻿@page "/incomeForm"
+@inherits IncomeFormBase
+@using RentalPropertyManagement.Components
+@attribute [Authorize]
+
+@if (PropertySet)
+{
+    <div class="top-row px-4">
+        <h2 style="font-weight: bold;height:3.5rem;color:whitesmoke;text-align:left;padding-top:1rem;">@Property.ShortName</h2>
+        <a href="/" style="font-size:14px;text-decoration:none">Change</a>
+    </div>
+    <div class="content px-4">
+        <div class="content px-4">
+            <div class="modal-body row">
+                <div class="col-12">
+                    <RadzenTemplateForm TItem="RentalPropertyManagement.Models.IncomeByRoom" Data="@IncomeByRoom" Submit="@((RentalPropertyManagement.Models.IncomeByRoom args) => { Submit(args); })" InvalidSubmit="@OnInvalidSubmit">
+                        <div class="row">
+                            <div class="col-xl-8 col-lg-12">
+                                <RadzenFieldset Text="Income Info">
+                                    <div class="modal-body row">
+                                        <div class="col-4 align-items-center d-flex">
+                                            <RadzenLabel Text="Year *" />
+                                        </div>
+                                        <div class="col-8">
+                                            <RadzenDropDown @bind-Value="IncomeByRoom.Year" AllowClear="true" Placeholder="Choose year.." Data="@YearList" Name="Year" style="width: 100%;">
+                                            </RadzenDropDown>
+                                            <RadzenRequiredValidator Component="Year" Text="Year required" Popup="@popup" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-body row">
+                                        <div class="col-4 align-items-center d-flex">
+                                            <RadzenLabel Text="Month *" />
+                                        </div>
+                                        <div class="col-8">
+                                            <RadzenDropDown @bind-Value="IncomeByRoom.Month" AllowClear="true" Placeholder="Choose month.." Data="@MonthList" Name="Month" style="width: 100%;">
+                                            </RadzenDropDown>
+                                            <RadzenRequiredValidator Component="Month" Text="Month required" Popup="@popup" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-body row">
+                                        <div class="col-4 align-items-center d-flex">
+                                            <RadzenLabel Text="Room *" />
+                                        </div>
+                                        <div class="col-8">
+                                            <RadzenDropDown @bind-Value="IncomeByRoom.Room" AllowClear="true" Placeholder="Choose room.." Data="@RoomList" Name="Room" style="width: 100%;">
+                                            </RadzenDropDown>
+                                            <RadzenRequiredValidator Component="Room" Text="Room required" Popup="@popup" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-body row">
+                                        <div class="col-4 align-items-center d-flex">
+                                            <RadzenLabel Text="Amount *" />
+                                        </div>
+                                        <div class="col-8">
+                                            <RadzenNumeric TValue="decimal" style="width: 100%;" @bind-Value="IncomeByRoom.Amount" Name="Amount" />
+                                            <RadzenRequiredValidator Component="Amount" Text="Amount is required" Popup="@popup" />
+                                        </div>
+                                    </div>
+                                    <div class="modal-body row">
+                                        <div class="col-4 align-items-center d-flex">
+                                            <RadzenLabel Text="Description" />
+                                        </div>
+                                        <div class="col-8">
+                                            <RadzenTextBox style="width: 100%;" @bind-Value="IncomeByRoom.Description" />
+                                        </div>
+                                    </div>
+                                </RadzenFieldset>
+                                <div class="modal-body row">
+                                    @if (Message.Length > 1)
+                                    {
+                                        if (RowsAffected == 0)
+                                        {
+                                            <BSAlert Color="Color.Danger">
+                                                @Message
+                                            </BSAlert>
+                                        }
+                                        else if (RowsAffected == -1)
+                                        {
+                                            <BSAlert Color="Color.Danger">
+                                                @Message
+                                            </BSAlert>
+                                        }
+                                        else if (RowsAffected == -99)
+                                        {
+                                            <BSAlert Color="Color.Info">
+                                                @Message
+                                            </BSAlert>
+                                        }
+                                        else
+                                        {
+                                            <BSAlert Color="Color.Success">
+                                                @Message
+                                            </BSAlert>
+                                        }
+
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" style="margin-top: 16px;">
+                                <RadzenButton ButtonType="Radzen.ButtonType.Submit" Icon="save" Text="Submit" />
+                            </div>
+                        </div>
+
+                    </RadzenTemplateForm>
+                </div>
+            </div>
+            <Confirm @ref="ConfirmRef" ConfirmationChanged="ConfirmSubmit" ConfirmItems="ConfirmItems">
+
+            </Confirm>
+        </div>
+    </div>
+}

@@ -1,0 +1,68 @@
+﻿@inherits RoomGridComponentBase
+
+@if (RoomOccupancies != null)
+{
+    <BSTable IsSmall="true" IsHoverable="false" IsBordered="true" IsStriped="true">
+        <BS_thead style="text-align:center;background-color:lightgray">
+            <BS_tr>
+                <BS_th scope="col">Month</BS_th>
+                <BS_th scope="col">Room 1A</BS_th>
+                <BS_th scope="col">Room 1B</BS_th>
+                @if (Property.ID == 1)
+                {
+                    <BS_th scope="col">Room 1C</BS_th>
+                    <BS_th scope="col">Room 1D</BS_th>
+                }
+                <BS_th scope="col">Room 2A</BS_th>
+                <BS_th scope="col">Room 2B</BS_th>
+                <BS_th scope="col">Room 2C</BS_th>
+                @if (Property.ID == 1)
+                {
+                    <BS_th scope="col">Room 2D</BS_th>
+                }
+                <BS_th scope="col">Total</BS_th>
+            </BS_tr>
+        </BS_thead>
+        <BS_tbody style="font-size:14px">
+            @foreach (var item in RoomOccupancies)
+            {
+                <BS_tr style="text-align:center">
+                    <BS_td>@item.Month</BS_td>
+                    <BS_td>@CellDisplayValue(item.Room1A)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Room1B)</BS_td>
+                    @if (Property.ID == 1)
+                    {
+                        <BS_td>@CellDisplayValue(item.Room1C)</BS_td>
+                        <BS_td>@CellDisplayValue(item.Room1D)</BS_td>
+                    }
+                    <BS_td>@CellDisplayValue(item.Room2A)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Room2B)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Room2C)</BS_td>
+                    @if (Property.ID == 1)
+                    {
+                        <BS_td>@CellDisplayValue(item.Room2D)</BS_td>
+                    }
+                    <BS_td>@CellDisplayValue(item.Total)</BS_td>
+                </BS_tr>
+            }
+            <BS_tr style="font-weight:bold;text-align:center">
+                <BS_td>Total</BS_td>
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room1A))</BS_td>
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room1B))</BS_td>
+                @if (Property.ID == 1)
+                {
+                    <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room1C))</BS_td>
+                    <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room1D))</BS_td>
+                }
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room2A))</BS_td>
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room2B))</BS_td>
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room2C))</BS_td>
+                @if (Property.ID == 1)
+                {
+                    <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Room2D))</BS_td>
+                }
+                <BS_td>@CellDisplayValue(RoomOccupancies.Sum(x => x.Total))</BS_td>
+            </BS_tr>
+        </BS_tbody>
+    </BSTable>
+}

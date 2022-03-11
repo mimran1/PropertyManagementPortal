@@ -1,0 +1,83 @@
+﻿@page "/"
+@namespace RentalPropertyManagement.Pages
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    Layout = null;
+}
+@using Microsoft.Extensions.Configuration
+@inject IConfiguration Configuration
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RentalPropertyManagement</title>
+    <base href="~/" />
+    <!-- Default BS CSS -->
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+    <!-- Default CSS -->
+    <link href="css/site.css" rel="stylesheet" />
+    <!-- Radzen CSS -->
+    <link rel="stylesheet" href="_content/Radzen.Blazor/css/default-base.css">
+</head>
+<body>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    <div id="blazor-error-ui">
+        <a href="I:\All Code Ever\Projects\CSharp\RentalPropertyManagement\RentalPropertyManagement\Pages\FinancialDetailYearMonth.razor">I:\All Code Ever\Projects\CSharp\RentalPropertyManagement\RentalPropertyManagement\Pages\FinancialDetailYearMonth.razor</a>
+        <environment include="Staging,Production">
+            An error has occurred. This application may no longer respond until reloaded.
+        </environment>
+        <environment include="Development">
+            An unhandled exception has occurred. See browser dev tools for details.
+        </environment>
+        <a href="" class="reload">Reload</a>
+        <a class="dismiss">🗙</a>
+    </div>
+
+    <script src="_framework/blazor.server.js"></script>
+    <!-- Radzen JS -->
+    <script src="_content/Radzen.Blazor/Radzen.Blazor.js"></script>
+    <!-- BlazorStyled is used by BlazorStrap documentation site -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <!-- The file below is needed by BlazorStrap -->
+    <script src="_content/BlazorStrap/blazorStrap.js"></script>
+    <!-- BlazorPro Spinkit (Loading Spinner)-->
+    <link href="_content/BlazorPro.Spinkit/spinkit.min.css" rel="stylesheet" />
+    <!-- Canvas JS -->
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <!-- My Scripts -->
+    <script src="~/js/TopContributors.js"></script>
+    <script src="~/js/TopContributorsNet.js"></script>
+    <script src="~/js/YearlyPerformance.js"></script>
+    <script src="~/js/MonthlyExpenseChart_2020.js"></script>
+    <script src="~/js/MonthlyExpenseChart_2021.js"></script>
+    <script src="~/js/MonthlyExpenseChart_2022.js"></script>
+    <script src="~/js/MonthlyExpenseChart.js"></script>
+    <script src="~/js/MonthlyIncomeChart.js"></script>
+    <script src="~/js/ExpenseInsight_2020.js"></script>
+    <script src="~/js/ExpenseInsight_2021.js"></script>
+    <script src="~/js/IncomeInsight_2020.js"></script>
+    <script src="~/js/canvasjs.js"></script>
+    <script src="~/js/SaveAsFile.js"></script>
+    <script src="~/js/RemoveUnderline.js"></script>
+    <script src="~/js/FlipCard.js"></script>
+    <script src="~/js/InitMap.js"></script>
+    <script src="~/js/IncomePieChartTop.js"></script>
+    <script src="~/js/ExpensePieChartTop.js"></script>
+    <script src="~/js/NetPieChartTop.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+    
+    <!-- Google Maps -->
+    <!-- See pricing: https://mapsplatform.google.com/pricing/ -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=@Configuration.GetConnectionString("GoogleMapsAPI")"></script>
+
+
+</body>
+</html>

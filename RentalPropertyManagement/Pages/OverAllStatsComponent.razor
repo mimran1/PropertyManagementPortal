@@ -1,0 +1,37 @@
+﻿@page "/overall"
+@inherits OverAllComponentBase
+@using RentalPropertyManagement.Components
+
+@if (PropertySet)
+{
+
+    <div class="content px-4">
+        <div class="modal-body row">
+            <div class="col-xl-10 col-lg-12">
+                <div class="row">
+                    <h2>OVERALL STATS</h2>
+                </div>
+                <h2>Profit Made Since September 2020: @OverAllNetIncome</h2>
+                <h3>From 47 Floral: @OverAllNetIncome47</h3>
+                <h3>From 198 W End: @OverAllNetIncome198</h3>
+                <div class="row">
+                    <div class="col-12">
+                        <BSCard>
+                            <BSCard CardType="CardType.Header" HeadingSize="HeadingSize.H3">Overall Profit Distribution</BSCard>
+                            <BSCard CardType="CardType.Body">
+                                <span>Profit made across all properties: </span>
+                                <b style="color:forestgreen">$@OverAllNetIncome (@OverAllNetIncomeMonthly /month)</b>
+                                <div class="modal-body row">
+                                    <div id="chartContainer" style="height: 370px; width: 100%;"></div>
+                                </div>
+                                <div class="modal-body row">
+                                    <div id="yearlyPerformance" style="height: 470px; width: 100%;"></div>
+                                </div>
+                            </BSCard>
+                        </BSCard>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

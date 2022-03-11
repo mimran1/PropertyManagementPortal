@@ -1,0 +1,47 @@
+﻿@inherits ExpenseGridComponentBase
+
+@if (ExpenseByYearMonths != null)
+{
+    <BSTable IsSmall="true" IsHoverable="false" IsBordered="true" IsStriped="true">
+        <BS_thead style="text-align:center;background-color:lightgray">
+            <BS_tr>
+                <BS_th scope="col">Month</BS_th>
+                <BS_th scope="col">PM</BS_th>
+                <BS_th scope="col">Labor</BS_th>
+                <BS_th scope="col">Material</BS_th>
+                <BS_th scope="col">Utilities</BS_th>
+                <BS_th scope="col">Taxes</BS_th>
+                <BS_th scope="col">Misc</BS_th>
+                <BS_th scope="col">Total</BS_th>
+            </BS_tr>
+        </BS_thead>
+        <BS_tbody style="font-size:14px">
+            @foreach (var item in ExpenseByYearMonths)
+            {
+                <BS_tr style="text-align:center">
+                    <BS_td>@item.Month</BS_td>
+                    <BS_td>
+                       @CellDisplayValue(item.PropertyMangement)
+                    </BS_td>
+                    <BS_td>@CellDisplayValue(item.Labor)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Material)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Utilities)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Taxes)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Misc)</BS_td>
+                    <BS_td>@CellDisplayValue(item.Total)</BS_td>
+                </BS_tr>
+            }
+            <BS_tr style="font-weight:bold;text-align:center">
+                <BS_td>Total</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.PropertyMangement))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Labor))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Material))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Utilities))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Taxes))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Misc))</BS_td>
+                <BS_td>@CellDisplayValue(ExpenseByYearMonths.Sum(x => x.Total))</BS_td>
+            </BS_tr>
+        </BS_tbody>
+    </BSTable>
+}
+

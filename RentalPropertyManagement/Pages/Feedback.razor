@@ -1,0 +1,65 @@
+﻿@page "/feedback"
+@inherits FeedbackBase
+
+<div class="content px-4">
+    @if (FeedBackItem != null)
+    {
+        <RadzenTemplateForm TItem="RentalPropertyManagement.Models.FeedBackItem" Data="@FeedBackItem" Submit="@((RentalPropertyManagement.Models.FeedBackItem args) => { Submit(args); })">
+            <div class="modal-body row">
+                <div class="col-md-6">
+                    <div class="modal-body row">
+                        <RadzenFieldset Text="Feedback">
+                            <div class="row">
+                                <div class="modal-body row">
+                                    <div class="col-4 align-items-center d-flex">
+                                        <RadzenLabel Text="Comment" />
+                                    </div>
+                                    <div class="col-8">
+                                        <RadzenTextBox style="width: 100%;" @bind-Value="FeedBackItem.comment" Name="comment" />
+                                        <RadzenRequiredValidator Component="comment" Text="Please enter some comment" Popup=false />
+                                    </div>
+                                </div>
+                            </div>
+                        </RadzenFieldset>
+                    </div>
+                    <div class="modal-body row">
+                        <div class="col-md-12" style="margin-left: -10px;">
+                            <RadzenButton ButtonType="Radzen.ButtonType.Submit" Icon="save" Text="Submit" />
+                        </div>
+                    </div>
+                    <div class="modal-body row">
+                        @if (Message.Length > 1)
+                        {
+                            if (RowsAffected == 0)
+                            {
+                                <BSAlert Color="Color.Danger">
+                                    @Message
+                                </BSAlert>
+                            }
+                            else if (RowsAffected == -1)
+                            {
+                                <BSAlert Color="Color.Danger">
+                                    @Message
+                                </BSAlert>
+                            }
+                            else if (RowsAffected == -99)
+                            {
+                                <BSAlert Color="Color.Info">
+                                    @Message
+                                </BSAlert>
+                            }
+                            else
+                            {
+                                <BSAlert Color="Color.Success">
+                                    @Message
+                                </BSAlert>
+                            }
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </RadzenTemplateForm>
+    }
+
+</div>

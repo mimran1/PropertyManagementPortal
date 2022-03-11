@@ -1,0 +1,1 @@
+select distinct year from RentInformation where PropertyId=@PropertyId order by year desc

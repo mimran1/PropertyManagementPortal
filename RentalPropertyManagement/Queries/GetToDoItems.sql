@@ -1,0 +1,1 @@
+select * from ToDoItems where PropertyId=@PropertyId and isDone=@IsDone

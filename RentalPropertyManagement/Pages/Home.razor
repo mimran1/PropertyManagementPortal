@@ -1,0 +1,510 @@
+﻿@page "/home"
+@inherits HomeComponentBase
+@using RentalPropertyManagement.Components
+@using RentalPropertyManagement.Models;
+@using BlazorPro.Spinkit
+
+<style type="text/css">
+    /* DataGrid column titles */
+    span.ui-column-title {
+        font-size: 13px !important;
+        font-family: serif;
+    }
+
+    /* DataGrid cell data */
+    span.ui-cell-data {
+        font-size: 13px !important;
+        font-family: serif;
+    }
+
+
+    /* DataGrid cell data */
+    span.ui-column-footer {
+        /*font: 11px/30px Lato, serif !important;*/
+        font-size: 13px !important;
+        font-family: serif;
+        /*text-align: center;*/
+    }
+
+    .card-body {
+        padding-top: 0.5rem;
+        padding-right: 1.25rem;
+        padding-bottom: 0rem;
+        padding-left: 1.25rem;
+    }
+
+    .card-body-2 {
+        padding-top: 0rem;
+        padding-right: 0rem;
+        padding-bottom: 0rem;
+        padding-left: 0rem;
+    }
+
+    .card-body-inner {
+        padding-top: 0rem;
+        padding-right: 0rem;
+        padding-bottom: 0rem;
+        padding-left: 0rem;
+    }
+
+    .expense-card-left-border {
+        border-left: 0.25rem solid #e27076 !important;
+    }
+
+    .income-card-left-border {
+        border-left: 0.25rem solid #0479cc !important;
+    }
+
+    .net-card-left-border {
+        border-left: 0.25rem solid #00876c !important;
+    }
+
+    .myModalBody {
+        padding-top: 15px
+    }
+
+    .varfontsize {
+        /* font-size: calc(12px + 1vw);*/
+        font-size: 120%;
+    }
+
+    .line {
+        border-bottom: 1px solid #ccc;
+        display: block;
+        padding: 3px;
+    }
+
+    .mylabel {
+        font-size: 0.85rem;
+    }
+
+    .myinfo {
+        font-size: 1rem;
+    }
+
+    /* THE MAINCONTAINER HOLDS EVERYTHING */
+    .maincontainer {
+        position: relative;
+        width: inherit;
+        height: 400px;
+        background: none;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* THE CARD HOLDS THE FRONT AND BACK FACES */
+    .thecard {
+        position: relative;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        transform-style: preserve-3d;
+        transition: all 0.8s ease;
+    }
+
+        /* THE PSUEDO CLASS CONTROLS THE FLIP ON MOUSECLICK */
+        .thecard.clicked {
+            transform: rotateY(180deg);
+        }
+
+    /* THE FRONT FACE OF THE CARD, WHICH SHOWS BY DEFAULT */
+    .thefront {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        border-radius: 0px;
+        backface-visibility: hidden;
+        overflow: hidden;
+        background: #fafafa;
+        color: #000;
+    }
+
+    /* THE BACK FACE OF THE CARD, WHICH SHOWS ON MOUSEOVER */
+    .theback {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: auto;
+        border-radius: 0px;
+        backface-visibility: hidden;
+        overflow: hidden;
+        background: #fafafa;
+        color: #333;
+        text-align: left;
+        transform: rotateY(180deg);
+    }
+
+
+        /*This block (starts here) is merely styling for the flip card, and is NOT an essential part of the flip code */
+        .thefront h1, .theback h1 {
+            font-family: 'zilla slab', sans-serif;
+            padding: 10px 1px 1px 20px;
+            font-weight: bold;
+            font-size: 24px;
+            text-align: left;
+        }
+
+        .thefront p, .theback p {
+            font-family: 'zilla slab', sans-serif;
+            padding: 1px 1px 1px 30px;
+            font-weight: normal;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+    .total {
+        margin: 0;
+        position: absolute;
+        top: 52%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        font-size: 1.6rem
+    }
+
+    /*This block (ends here) is merely styling for the flip card, and is NOT an essential part of the flip code */
+</style>
+
+
+<div class="top-row px-4">
+    @if (PropertySet)
+    {
+
+        <h2 style="font-weight: bold;height:3.5rem;color:whitesmoke;text-align:left;padding-top:1rem;padding-left:10px">@Property.ShortName</h2>
+    }
+    <a href="/" style="font-size:14px;text-decoration:none">Change</a>
+</div>
+
+<div class="content px-4">
+    <div class="row">
+        <div class="col-12 col-xxl-8 col-xxxl-9 mb-5">
+            <BSCard>
+                <BSCard CardType="CardType.Header" HeadingSize="HeadingSize.H3">
+                    <span style="font-size:1.3rem">Property Performance</span>
+                </BSCard>
+                <BSCard CardType="CardType.Body">
+                    <RadzenTabs Change=@OnTabClick>
+                        <Tabs>
+
+                            <SpinLoader IsLoading="RetrivingData">
+                                <LoadingTemplate>
+                                    <div class="modal-body row">
+                                        <CircleFade Size="50px" Center="true"></CircleFade>
+                                    </div>
+                                </LoadingTemplate>
+                                <ContentTemplate>
+                                    <RadzenTabsItem Text="OverAll" style="text-decoration: none">
+                                        @if (SelectedTab != 0)
+                                        {
+                                            <div class="modal-body row">
+                                                @foreach (var infoCardItem in InfoCardList)
+                                                {
+                                                    <div class="col-xl-3 d-none d-lg-block">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="0.6"></InfoCardComponent>
+                                                    </div>
+                                                    <div class="col-md-4 d-none d-md-block d-lg-none">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="1.6"></InfoCardComponent>
+                                                    </div>
+                                                    <div class="col-12 d-block d-md-none">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="2.6"></InfoCardComponent>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                        <div class="modal-body row">
+                                            <div class="col-6">
+                                                <div class="d-flex justify-content-start">
+                                                    <span style="font-size:2rem;">Net Income:&nbsp;<b style="color: forestgreen">$@String.Format("{0:0}", @OverAllNetIncomeAmount) </b></span>
+                                                </div>
+                                                <div class="d-flex justify-content-start">
+                                                    <span style="font-size:1rem; font-style:italic">&nbsp;&nbsp;Avg Monthly Net Income:&nbsp;$@String.Format("{0:0}", @AverageNetMonthlyIncome)</span>
+                                                </div>
+                                                <div class="d-flex justify-content-start">
+                                                    <span style="font-size:1rem; font-style:italic">&nbsp;&nbsp;OER:&nbsp;@String.Format("{0:0}", @OER)%</span>
+                                                </div>
+                                            </div>
+                                            @*<div class="col-6">
+                                                <div class="d-flex justify-content-end">
+                                                <span style="font-size:2rem;">@Property.ShortName</span>
+                                                </div>
+                                                </div>*@
+                                        </div>
+                                        <div class="modal-body row justify-content-around">
+                                            <div class="col-12 col-xxl-5">
+                                                <div id="wrapper2" style="height: 400px; width: 100%;position:relative;">
+                                                    <div id="chartContainer" style="height: 100%; width: 100%;"></div>
+                                                    <div class="total" id="totalIncome">-</div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-xxl-5">
+                                                <div id="wrapper" style="height: 400px; width: 100%;position:relative;">
+                                                    <div id="expensePieChart" style="height: 100%; width: 100%;"></div>
+                                                    <div class="total" id="totalExpense">-</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </RadzenTabsItem>
+                                    @foreach (var year in YearList)
+                                    {
+                                        <RadzenTabsItem Text=@year.ToString() style="text-decoration: none">
+                                            <div class="row varfontsize" style="font-weight:bold">
+                                                
+                                                <div class="col-12">
+                                                    <div class="d-flex justify-content-center">
+                                                        @if (year == 2022)
+                                                        {
+                                                            <span>@year.ToString() Year-To-Date</span>
+                                                        }
+                                                        else
+                                                        {
+                                                            <span>@year.ToString() Summary</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="modal-body row">
+
+                                                @foreach (var infoCardItem in InfoCardList)
+                                                {
+                                                    <div class="col-xl-3 d-none d-xl-block">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="0.6"></InfoCardComponent>
+                                                    </div>
+                                                    <div class="col-md-4 d-none d-md-block d-xl-none">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="1.6"></InfoCardComponent>
+                                                    </div>
+                                                    <div class="col-12 d-block d-md-none">
+                                                        <InfoCardComponent InfoCard="infoCardItem" FontSize="2.6"></InfoCardComponent>
+                                                    </div>
+                                                }
+                                            </div>
+
+                                            <div class="modal-body row justify-content-around">
+                                                <div class="col-xxl-12 col-xxxl-9">
+                                                    <div id=@String.Concat("monthlyExpenseChart_", @year.ToString()) style="height:400px; width:100%;"></div>
+                                                </div>
+                                                <!-- Show Top earnings only when display is xxl or greater-->
+                                                <!-- On xxl occupy 4 cols on xxxl occupy 2 cols-->
+                                            <div class="col-xxl-4 col-xxxl-2 d-none d-xxl-block" style="margin-top:70px">
+                                                    <div class="row" style="font-size:calc(8px + 0.3vw);">
+                                                        <BSCard style="padding-left:0px;padding-right:0px">
+                                                            <BSCard CardType="CardType.Body" style="background-color:#e5f2e5">
+                                                                <BSCard CardType="CardType.Text" style="font-weight:bold">Top Earning Month</BSCard>
+                                                                <BSCard CardType="CardType.Text">
+                                                                    <div class="row" style="padding-left:25px">
+                                                                        Month: @MonthlyFinancials.OrderByDescending(x => x.Net).First().Month
+                                                                    </div>
+                                                                    <div class="row" style="padding-left:25px;padding-top:7px">
+                                                                        Amount: $@(String.Format("{0:0}", MonthlyFinancials.OrderByDescending(x => x.Net).First().Net))
+                                                                    </div>
+                                                                </BSCard>
+                                                            </BSCard>
+                                                            <BSCard CardType="CardType.Body" style="background-color:#ffe5e5">
+                                                                <BSCard CardType="CardType.Text" style="font-weight:bold">Most Expensive Month</BSCard>
+                                                                <BSCard CardType="CardType.Text">
+                                                                    <div class="row" style="padding-left:25px">
+                                                                        Month: @MonthlyFinancials.OrderByDescending(x => x.Expenditure).First().Month
+                                                                    </div>
+                                                                    <div class="row" style="padding-left:25px;padding-top:7px">
+                                                                        Amount: $@(String.Format("{0:0}", MonthlyFinancials.OrderByDescending(x => x.Expenditure).First().Expenditure))
+                                                                    </div>
+                                                                </BSCard>
+                                                            </BSCard>
+                                                        </BSCard>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @if (Property.ID != -1)
+                                            {
+                                                <div class="modal-body row">
+                                                    <div class="d-flex justify-content-center">
+                                                        <span style="font-size:1rem;"><b>INCOME</b></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-center">
+                                                        <RoomGridComponent RoomOccupancies="@RoomOccupancies" Property="Property"></RoomGridComponent>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-body row">
+                                                    <div class="d-flex justify-content-center">
+                                                        <span style="font-size:1rem;"><b>EXPENSE</b></span>
+                                                    </div>
+                                                    <div class="d-flex justify-content-center">
+                                                        <ExpenseGridComponent ExpenseByYearMonths="@Expenses"></ExpenseGridComponent>
+                                                    </div>
+                                                </div>
+                                            }
+
+                                        </RadzenTabsItem>
+                                    }
+                                </ContentTemplate>
+                            </SpinLoader>
+                        </Tabs>
+                    </RadzenTabs>
+                    <!-- Following prints which prcess is running your app. On local it can be iis. On prod its w3wp-->
+                    @*<div class="modal-body row">
+                        @System.Diagnostics.Process.GetCurrentProcess().ProcessName
+                    </div>*@
+                    
+                </BSCard>
+            </BSCard>
+        </div>
+
+        @if (PropertySet)
+        {
+            if (Property.ID == -1)
+            {
+
+
+            }
+            else
+            {
+                <div class="col-6 col-xxl-4 col-xxxl-3">
+                    <div class="d-block d-xl-none" style="padding-top:20px"></div>
+                    <div class="row">
+                        <div class="col-12">
+                            <BSCard>
+                                <BSCard CardType="CardType.Header" HeadingSize="HeadingSize.H3">
+                                    <span style="font-size:1.3rem">Property Detail</span>
+                                </BSCard>
+                                @if (Property.ID == 1)
+                                {
+                                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="/images/IMG_20200830_111032.jpg"></BSCard>
+                                }
+                                else if (Property.ID == 2)
+                                {
+                                    <BSCard CardType="CardType.Image" VerticalAlignment="VerticalAlignment.Top" src="/images/198WEnd.PNG"></BSCard>
+                                }
+                            </BSCard>
+                        </div>
+                        <div class="col-12">
+                            <RadzenTabs Change=@OnPropertyTabClick>
+                                <Tabs>
+                                    <RadzenTabsItem Text="Info">
+                                        <div class="row">
+                                            <!-- See pricing: https://mapsplatform.google.com/pricing/ -->
+                                            <div class="pleaseWork" id="map" style="width:100%;height:300px"></div>
+                                        </div>
+                                        <div class="modal-body row">
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <span style="font-size:1.1rem"><b>@Property.Address</b></span>
+
+                                                </div>
+                                                <div class="row">
+                                                    <span class="myinfo"><b>@Property.NumBeds Bds&nbsp;&nbsp;&nbsp;@Property.NumBaths Bths</b></span>
+                                                </div>
+                                                <div class="row">
+                                                    <span class="line"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">Purchase Date</em>
+                                                    <div class="myinfo">
+                                                        <b>@Property.DateOfPurchase.ToString("M/dd/yyyy")</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">Purchase Price</em>
+                                                    <div class="myinfo">
+                                                        <b>$@(String.Format("{0:n0}", (int)Property.PurchasePrice))</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">Current Monthly Income</em>
+                                                    <div class="myinfo">
+                                                        <b>$@CurrentIncome</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">Avg. Monthly Net Income</em>
+                                                    <div class="myinfo">
+                                                        <b>$@AverageNetMonthlyIncome</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">Avg. Monthly Expense</em>
+                                                    <div class="myinfo">
+                                                        <b>$@AverageMonthlyExpense</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">City Tax (annual)</em>
+                                                    <div class="myinfo">
+                                                        <b>$@(String.Format("{0:0}", PropertyCityTax))</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">School Tax (annual)</em>
+                                                    <div class="myinfo">
+                                                        <b>$@(String.Format("{0:0}", PropertySchoolTax))</b>
+                                                    </div>
+                                                </div>
+                                                <div class="myModalBody row">
+                                                    <em class="mylabel">OER</em>
+                                                    <div class="myinfo">
+                                                       <b>@(String.Format("{0:0}", OER))%</b>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </RadzenTabsItem>
+                                    <RadzenTabsItem Text="To Do">
+                                        <div class="modal-body row" style="padding-top:0px">
+                                            @if (ToDoItemsNotDone != null)
+                                            {
+                                                <div class="modal-body row">
+                                                    @{
+                                                        int counter = 1;
+
+                                                        @foreach (var item in ToDoItemsNotDone)
+                                                        {
+
+                                                            <p>@counter.&nbsp;@item.Description</p>
+                                                            counter++;
+                                                        }
+
+
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="modal-body row" style="padding-top:0px">
+                                            @if (ToDoItemsDone != null)
+                                            {
+                                                <div class="modal-body row">
+                                                    @{
+                                                        int counter = 1;
+
+                                                        @foreach (var item in ToDoItemsDone)
+                                                        {
+
+                                                            <p style="text-decoration: line-through;">&nbsp;&nbsp;@item.Description&nbsp;&nbsp;</p>
+                                                            counter++;
+                                                        }
+
+
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    </RadzenTabsItem>
+                                </Tabs>
+                            </RadzenTabs>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+

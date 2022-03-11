@@ -1,0 +1,1 @@
+insert into RentInformation(Year,Month,Room1A,Room1B,Room1C,Room1D,Room2A,Room2B,Room2C,Room2D) values (2021,'August',550,0,0,0,0,0,0,0)

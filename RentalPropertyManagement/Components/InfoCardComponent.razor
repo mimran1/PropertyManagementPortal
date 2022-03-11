@@ -1,0 +1,65 @@
+﻿@inherits InfoCardComponentBase
+
+<style>
+
+     @String.Concat(".card-left-border_",InfoCard.Type) {
+        border-left: 0.25rem solid @CardLeftBorderColor !important;
+    }
+
+    .myClass47 {
+        background-color: #a4b9b9 !important
+    }
+
+    .myClass198 {
+        background-color: #e5d5b9 !important
+    }
+
+</style>
+<BSCard Class=@String.Concat("card-left-border","_",InfoCard.Type) >
+    <BSCard CardType="CardType.Body">
+        <BSCard CardType="CardType.Text">
+            <div class="row">
+                <div style="font-size:1rem;font-family: Nunito;font-weight:bold;text-transform:uppercase">@InfoCard.Type</div>
+            </div>
+            <div class="row">
+                <div style="font-size:1.8rem;font-family: Nunito;color:@CardLeftBorderColor;font-weight:bold">$@(String.Format("{0:n0}", InfoCard.Amount))</div>
+            </div>
+
+            @if (InfoCard.PropertyList.Count != 0)
+            {
+                <br />
+                int counter = 0;
+                @foreach (KeyValuePair<string, decimal> item in InfoCard.PropertyList)
+                {
+                    counter++;
+                    <div class="row" style="padding-left: 15px">
+                        <div class="col-12">
+                            <div className="text-center" style="font-size:1.1rem;text-transform:uppercase;font-family:Nunito">-&nbsp;@item.Key:&nbsp;&nbsp;$@(String.Format("{0:n0}", item.Value))</div>
+                        </div>
+                        <!--<div class="col-12" style="padding-left:10px">-->
+                            @*<BSProgress Value="@((int)(Math.Round((double)item.Value / InfoCard.Amount * 100.0)))" style="height: 12px;font-size:10px;">@((int)(Math.Round((double)item.Value / InfoCard.Amount * 100.0)))%</BSProgress>*@
+                            <!--@if (item.Key != null)
+                            {
+                                decimal amt = (Math.Round(item.Value / InfoCard.Amount * 100));
+                                int progressAmt = (int)amt;
+
+                                @if (item.Key.Equals("47 Floral"))
+                                {
+                                    <BSProgress Value="@progressAmt" style="height: 12px;font-size:0.8rem;" Class="myClass47">@amt%</BSProgress>
+                                }
+                                else if (item.Key.Equals("198 W End"))
+                                {
+                                    <BSProgress Value="@progressAmt" style="height: 12px;font-size:0.8rem;" Class="myClass198">@amt%</BSProgress>
+                                }
+                            }
+                        </div>-->
+                    </div>
+                    @*if (counter != LastRow)
+                    {
+                        <div class="modal-body row"></div>
+                    }*@
+                }
+            }
+        </BSCard>
+    </BSCard>
+</BSCard>

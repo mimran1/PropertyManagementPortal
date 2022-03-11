@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+@inject RentalPropertyManagement.Services.PropertyService PropertyService
+@inject Blazored.SessionStorage.ISessionStorageService SessionStorageService
+@using RentalPropertyManagement.Models;
+
+
+<div class="sidebar">
+    <NavMenu />
+</div>
+<br />
+<div class="main" style="background-color:#F4F4F4">
+    @Body
+</div>
+
+
+@*@code{
+    public Property Property { get; set; }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            Property = await SessionStorageService.GetItemAsync<Property>("Property");
+            StateHasChanged();
+        }
+}*@

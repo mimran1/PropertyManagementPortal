@@ -1,0 +1,37 @@
+﻿@inherits ConfirmBase
+
+
+<BSModal @ref="VerticallyCentered" IsCentered="true">
+    <BSModalHeader OnClick="@ToggleModal">@ConfirmItems.Title</BSModalHeader>
+    @if(ConfirmItems.Items != null)
+    {
+    <BSModalBody>
+
+        <div>@ConfirmItems.Message</div>
+        <BSTable>
+            <BS_tbody>
+                @foreach (var item in ConfirmItems.Items)
+                    {
+                <BS_tr>
+                    <BS_td>@item.Key</BS_td>
+                    @if (item.Key.Equals("Amount"))
+                            {
+                    <BS_td>$@item.Value</BS_td>
+                            }
+                            else
+                            {
+                    <BS_td>@item.Value</BS_td>
+                            }
+                </BS_tr>
+                    }
+            </BS_tbody>
+        </BSTable>
+
+    </BSModalBody>
+    }
+    <BSModalFooter>
+        <BSButton Color="Color.Secondary" @onclick="@OnNo">No</BSButton>
+        <BSButton Color="Color.Primary" @onclick="@OnYes">Yes</BSButton>
+    </BSModalFooter>
+</BSModal>
+

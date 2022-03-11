@@ -1,0 +1,85 @@
+﻿@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment _env
+
+
+<div class="top-row pl-4 navbar navbar-dark">
+    <a class="navbar-brand" style="font-size:0.7rem;padding-left:5px" href="Home">
+        <b>RENTAL PROPERTY MANAGEMENT</b>
+    </a>
+
+    <button class="navbar-toggler" @onclick="ToggleNavMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column">
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Home" Match="NavLinkMatch.All">
+                <span class="oi oi-home" aria-hidden="true"></span> Home
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="MonthlyFinancialDetail">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Monthly Report
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Ledger">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Ledger
+            </NavLink>
+        </li>
+        <li class="nav-item px-3">
+            <NavLink class="nav-link" href="Feedback">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Feedback
+            </NavLink>
+        </li>
+        <AuthorizeView Roles="Admin">
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="expenseForm">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Enter Expense
+                    </NavLink>
+                </li>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="incomeForm">
+                        <span class="oi oi-plus" aria-hidden="true"></span> Enter Income
+                    </NavLink>
+                </li>
+            </Authorized>
+        </AuthorizeView>
+
+        <AuthorizeView Roles="Admin, Normal">
+            <Authorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="/identity/account/logout">
+                        <span class="oi oi-power-standby" aria-hidden="true"></span> Logout @context.User.Identity.Name.Split('@')[0]
+                    </NavLink>
+                </li>
+            </Authorized>
+            <NotAuthorized>
+                <li class="nav-item px-3">
+                    <NavLink class="nav-link" href="/identity/account/login">
+                        <span class="oi oi-lock-locked" aria-hidden="true"></span> Login
+                    </NavLink>
+                </li>
+            </NotAuthorized>
+        </AuthorizeView>
+
+    </ul>
+
+
+</div>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private string Year { get; set; } = "2020";
+    private string Month { get; set; } = "August";
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}

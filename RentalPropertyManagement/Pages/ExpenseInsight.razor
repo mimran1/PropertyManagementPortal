@@ -1,0 +1,31 @@
+﻿@page "/expenseInsight"
+@inherits ExpenseInsightBase
+
+<div class="top-row px-4">
+    <h2 style="font-weight: bold;height:3.5rem;color:whitesmoke;text-align:left;padding-top:1rem;">Expense Insight</h2>
+</div>
+
+<div class="content px-4">
+    <div class="modal-body row">
+        <div class="col-md-12 col-lg-10 col-xl-8">
+            <RadzenTabs>
+                <Tabs>
+                    <RadzenTabsItem Text="2020" @onclick="OnTab2020_Click">
+                        @if (MonthlyExpenseByCategories_2020 == null)
+                        {
+                            <div>Loading..</div>
+                        }
+                        <div id="expenseInsightChart_2020" style="height: 420px; width:100%;"></div>
+                    </RadzenTabsItem>
+                    <RadzenTabsItem Text="2021" @onclick="OnTab2021_Click">
+                        @if (MonthlyExpenseByCategories_2021 == null)
+                        {
+                            <div>Loading..</div>
+                        }
+                        <div id="expenseInsightChart_2021" style="height: 420px; width:100%;"></div>
+                    </RadzenTabsItem>
+                </Tabs>
+            </RadzenTabs>
+        </div>
+    </div>
+</div>

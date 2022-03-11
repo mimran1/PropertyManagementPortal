@@ -1,0 +1,138 @@
+﻿@layout ChoosePropertyLayout
+@page "/"
+@inherits ChangePropertyComponentBase
+@using BlazorPro.Spinkit
+
+<style>
+    .content {
+        margin-top: 250px;
+        height: 80vh;
+    }
+
+    .my-btn {
+        border-radius: 0.8rem
+    }
+
+    .btn-raised {
+        transition: box-shadow .4s cubic-bezier(.25, .8, .25, 1), transform .4s cubic-bezier(.25, .8, .25, 1);
+        box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .26);
+    }
+
+        .btn-raised:not([disabled]):hover {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .4);
+            transform: translate3d(0, -1px, 0)
+        }
+</style>
+
+<div class="top-row px-4" style="justify-content:center">
+    <h2 style="color:white">RENTAL PROPERTY MANAGEMENT</h2>
+</div>
+<div class="content px-4">
+    <div class="row justify-content-center">
+        <SpinLoader IsLoading="RetrievingData">
+            <LoadingTemplate>
+                <CircleFade Size="50px"></CircleFade>
+            </LoadingTemplate>
+            <ContentTemplate>
+                <div class="col-12">
+                    @if (FirstVisit != null)
+                    {
+                        <div class="row justify-content-center">
+                            <div class="col-3 col-xl-2">
+                                <div class="modal-body d-flex justify-content-center">
+                                    <h3>Choose Property</h3>
+                                </div>
+                                <div class="modal-body row">
+                                    <RadzenButton class="my-btn btn-raised" style="margin: 0 1rem 1rem 0;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important" Click=@(args => OnClick(-1)) ButtonStyle="ButtonStyle.Info">
+
+                                        @if (!FirstVisit.Equals("Y"))
+                                        {
+                                            @if (PropertyService.Property.ID == -1)
+                                            {
+                                                <em>All Properties</em>
+                                            }
+                                            else
+                                            {
+                                                <span>All Properties</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>All Properties</span>
+                                        }
+                                    </RadzenButton>
+                                </div>
+                                @*<div class="modal-body row">
+                                        <button class="my-btn btn-raised" style="margin: 0 1rem 1rem 0;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important">All Properties</button>
+                                    </div>*@
+                                <div class="modal-body row">
+                                    <RadzenButton class="my-btn btn-raised" style="margin: 0 1rem 1rem 0;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important;" Click=@(args => OnClick(1)) ButtonStyle="ButtonStyle.Info">
+                                        @if (!FirstVisit.Equals("Y"))
+                                        {
+                                            @if (PropertyService.Property.ID == 1)
+                                            {
+                                                <em>47 Floral</em>
+                                            }
+                                            else
+                                            {
+                                                <span>47 Floral</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>47 Floral</span>
+                                        }
+                                    </RadzenButton>
+                                </div>
+                                <div class="modal-body row">
+                                    <RadzenButton class="my-btn btn-raised" style="margin: 0 1rem 1rem 0;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important;" Click=@(args => OnClick(2)) ButtonStyle="ButtonStyle.Info">
+                                        @if (!FirstVisit.Equals("Y"))
+                                        {
+                                            @if (PropertyService.Property.ID == 2)
+                                            {
+                                                <em>198 West End</em>
+                                            }
+                                            else
+                                            {
+                                                <span>198 West End</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>198 West End</span>
+                                        }
+
+                                    </RadzenButton>
+                                </div>
+                                <div class="modal-body row">
+                                    <RadzenButton class="my-btn btn-raised" style="margin: 0 1rem 1rem 0;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important;" Click=@(args => OnClick(3)) ButtonStyle="ButtonStyle.Info">
+                                        @if (!FirstVisit.Equals("Y"))
+                                        {
+                                            @if (PropertyService.Property.ID == 3)
+                                            {
+                                                <em>42 Johnson</em>
+                                            }
+                                            else
+                                            {
+                                                <span>42 Johnson</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span>42 Johnson</span>
+                                        }
+
+                                    </RadzenButton>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </ContentTemplate>
+        </SpinLoader>
+    </div>
+</div>
+
+
+

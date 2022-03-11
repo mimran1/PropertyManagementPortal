@@ -1,0 +1,2 @@
+select PropertyId, v.Year,v.Month,v.Category,v.Amount,p.shortname from vwPropertyExpensesByCategory v, MonthNameNumber m, RentalProperties p where v.Month=m.Month and v.propertyid=p.id 
+order by m.MonthNumber, v.Category 

@@ -1,0 +1,127 @@
+﻿@inherits ExpenseByCategoryGridComponentBase
+@using RentalPropertyManagement.Models
+
+@if (ExpenseByYearMonths != null)
+{
+    <RadzenGrid Data="@ExpenseByYearMonths" TItem="ExpenseByYearMonth" RowRender="@RowRender" CellRender="@CellRender">
+        <Columns>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Month" Title="Month" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Month
+                    </div>
+                </HeaderTemplate>
+                <FooterTemplate>
+                    <div>
+                        Total:
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="PropertyManager" Title="Property Man." Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Prop. Mang.
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.PropertyMangement)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.PropertyMangement))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Labor" Title="Labor" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Labor
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Labor)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Labor))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Material" Title="Material" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Material
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Material)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Material))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Utilities" Title="Utilities" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Utilities
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Utilities)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Utilities))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Taxes" Title="Taxes" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Taxes
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Taxes)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Taxes))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Misc" Title="Misc" Width="@(ColWidth)">
+                <HeaderTemplate>
+                    <div>
+                        Misc
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Misc)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Misc))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+            <RadzenGridColumn TItem="ExpenseByYearMonth" Property="Total" Width="@(ColWidth)" >
+                <HeaderTemplate>
+                    <div>
+                        Total
+                    </div>
+                </HeaderTemplate>
+                <Template Context="ExpenseByYearMonth">
+                    @GetCellValue(ExpenseByYearMonth.Total)
+                </Template>
+                <FooterTemplate>
+                    <div>
+                        <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByYearMonths.Sum(x => x.Total))</b>
+                    </div>
+                </FooterTemplate>
+            </RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}

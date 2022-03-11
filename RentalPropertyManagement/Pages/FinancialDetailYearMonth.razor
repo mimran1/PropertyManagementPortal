@@ -1,0 +1,567 @@
+﻿@page "/MonthlyFinancialDetail"
+@page "/MonthlyFinancialDetail/{year}/{month}"
+@inherits FinancialDetailYearMonthBase
+@using RentalPropertyManagement.Components
+
+
+<style>
+    .card-body {
+        -ms-flex: 1 1 auto;
+        flex: 1 1 auto;
+        padding-top: 0.95rem;
+        padding-right: 0.25rem;
+        padding-bottom: 0.25rem;
+        padding-left: 0.25rem;
+    }
+
+    .total {
+        margin: 0;
+        position: absolute;
+        top: 48%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%);
+        font-size: 2rem
+    }
+</style>
+
+<div class="top-row px-4">
+    @if (PropertySet)
+    {
+
+        <h2 style="font-weight: bold;height:3.5rem;color:whitesmoke;text-align:left;padding-top:1rem;">@Property.ShortName</h2>
+    }
+    <a href="/" style="font-size:14px;text-decoration:none">Change</a>
+</div>
+
+<div class="content px-4">
+    <div class="row justify-content-center">
+
+        <div class="col-10">
+            <SpinLoader IsLoading="RetrivingData">
+                <LoadingTemplate>
+                    <div class="modal-body row">
+                        <CircleFade Size="50px" Center="true"></CircleFade>
+                    </div>
+                </LoadingTemplate>
+                <ContentTemplate>
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="row">
+                                <div class="col-12">
+                                    @if (Property.ID == -1)
+                                    {
+                                        <em>*Change to a specific property to see more in depth report</em>
+                                    }
+                                </div>
+                            </div>
+                            <div class="modal-body row">
+                                <div class="col-12">
+                                    <BSCard>
+                                        <BSCard CardType="CardType.Header">
+                                            <div class="row">
+                                                <div class="col-4" style="font-size:1.8rem;font-weight:bold">
+                                                    @Month,&nbsp;@Year
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="d-flex justify-content-center">
+                                                        @*<BSButtonGroup Class="decimal-left">
+                                                            <BSDropdown>
+                                                            <BSButtonGroup>
+                                                            <BSDropdownToggle Size="Size.Small" IsSplit="false" Color="Color.Secondary">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@Month, @Year&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</BSDropdownToggle>
+                                                            <BSDropdownMenu>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2020", "All months"))">All months, 2020</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2020", "September"))">September, 2020</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2020", "October"))">October, 2020</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2020", "November"))">November, 2020</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2020", "December"))">December, 2020</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "January"))">January, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "February"))">February, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "March"))">March, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "April"))">April, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "May"))">May, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "June"))">June, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "July"))">July, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "August"))">August, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "September"))">September, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "October"))">October, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "November"))">November, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2021", "December"))">December, 2021</BSDropdownItem>
+                                                            <BSDropdownItem @onclick="@(() => HandleClick("2022", "January"))">January, 2022</BSDropdownItem>
+                                                            </BSDropdownMenu>
+                                                            </BSButtonGroup>
+                                                            </BSDropdown>
+                                                            </BSButtonGroup>*@
+                                                        @*<RadzenDatePicker TValue="DateTime?" Change=@(args => OnDateUpdate(args, "DatePicker with disabled dates", "MM/dd/yyyy")) Class="w-100" />*@
+                                                     
+                                                            <div class="d-flex justify-content-around">
+                                                                <div class="col-3">
+                                                                    <RadzenDropDown AllowClear="false" TValue="string" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="false" Class="w-100"
+                                                                            Placeholder=@Month Data=@MonthList @bind-Value=@SelectMonth />
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <RadzenDropDown AllowClear="false" TValue="string" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowFiltering="false" Class="w-100"
+                                                                            Placeholder=@Year Data=@YearList @bind-Value=@SelectYear />
+                                                                </div>
+                                                                <div class="col-3">
+                                                                    <RadzenButton Click=@(args => HandleClick(SelectYear,SelectMonth)) Text="Go" ButtonStyle="ButtonStyle.Primary" />
+                                                                </div>
+                                                            </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                                <div class="col-4" style="font-size:1.8rem;font-weight:bold">
+                                                    <div class="d-flex justify-content-end">
+                                                        @Property.ShortName
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </BSCard>
+                                        @if (DataAvailable)
+                                        {
+                                            <BSCard CardType="CardType.Body">
+                                                <div class="modal-body row">
+                                                    <div class="modal-body row justify-content-between">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <div class="col-md-12 col-lg-4">
+                                                                    <BSCard Class="shadow" Alignment="BlazorStrap.Alignment.Center">
+                                                                        <BSCard CardType="CardType.Body">
+                                                                            <BSCard CardType="CardType.Subtitle">
+                                                                                <div class="row justify-content-center">
+
+                                                                                    @if (RetrivingData)
+                                                                                    {
+                                                                                        <em>Loading...</em>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (IncomeDataAvailable)
+                                                                                        {
+                                                                                            if (Property.ID == -1)
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Income</span>
+                                                                                                <div id="wrapper" style="height: 360px; width: 100%;position:relative;">
+                                                                                                    <div id="incomePieChartTop" style="height: 100%; width: 100%;"></div>
+                                                                                                    <div class="total" id="totalIncome">-</div>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Income: &nbsp;$@(String.Format("{0:0}", IncomeByRooms.Sum(x => x.Amount)))</span>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span style="font-size:1.6rem">Income</span>
+                                                                                            <span>No Income to report</span>
+                                                                                        }
+                                                                                    }
+                                                                                </div>
+                                                                            </BSCard>
+                                                                        </BSCard>
+                                                                    </BSCard>
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-4">
+                                                                    <BSCard Class="shadow" Alignment="BlazorStrap.Alignment.Center">
+                                                                        <BSCard CardType="CardType.Body">
+                                                                            <BSCard CardType="CardType.Subtitle">
+                                                                                <div class="row justify-content-center">
+                                                                                    @if (RetrivingData)
+                                                                                    {
+                                                                                        <em>Loading...</em>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (ExpenseDataAvailable)
+                                                                                        {
+                                                                                            if (Property.ID == -1)
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Expense</span>
+                                                                                                <div id="wrapper" style="height: 360px; width: 100%;position:relative;">
+                                                                                                    <div id="expensePieChartTop" style="height: 100%; width: 100%;"></div>
+                                                                                                    <div class="total" id="totalExpense">-</div>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Expense: &nbsp;$@(String.Format("{0:0}", ExpenseByCategories.Sum(x => x.Amount)))</span>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <span style="font-size:1.6rem">Expense</span>
+                                                                                            <span>No Expense to report</span>
+                                                                                        }
+                                                                                    }
+                                                                                </div>
+                                                                            </BSCard>
+                                                                        </BSCard>
+                                                                    </BSCard>
+                                                                </div>
+                                                                <div class="col-md-12 col-lg-4">
+                                                                    <BSCard Class="shadow" Alignment="BlazorStrap.Alignment.Center">
+                                                                        <BSCard CardType="CardType.Body">
+                                                                            <BSCard CardType="CardType.Subtitle">
+                                                                                <div class="row justify-content-center">
+                                                                                    @if (RetrivingData)
+                                                                                    {
+                                                                                        <em>Loading...</em>
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        if (IncomeDataAvailable || ExpenseDataAvailable)
+                                                                                        {
+                                                                                            if (Property.ID == -1)
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Net</span>
+                                                                                                <div id="wrapper" style="height: 360px; width: 100%;position:relative;">
+                                                                                                    <div id="netPieChartTop" style="height: 100%; width: 100%;"></div>
+                                                                                                    <div class="total" id="totalNet">-</div>
+                                                                                                </div>
+                                                                                            }
+                                                                                            else
+                                                                                            {
+                                                                                                <span style="font-size:1.6rem">Net: &nbsp;$@(String.Format("{0:0}", IncomeByRooms.Sum(x => x.Amount) - ExpenseByCategories.Sum(x => x.Amount)))</span>
+                                                                                            }
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <div>No activity to report.</div>
+                                                                                        }
+                                                                                    }
+                                                                                </div>
+                                                                            </BSCard>
+                                                                        </BSCard>
+                                                                    </BSCard>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                @if (Property.ID != -1)
+                                                {
+                                                    <!-- Income Card Row Begin -->
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <BSCard CardType="CardType.Card" Class="shadow">
+                                                                <BSCard CardType="CardType.Header">Income</BSCard>
+                                                                <BSCard CardType="CardType.Body">
+                                                                    @if (IncomeDataAvailable)
+                                                                    {
+                                                                        <div class="modal-body row">
+                                                                            <div class="col-xl-6">
+                                                                                <div class="modal-body row">
+                                                                                    @NumOfRoomsOccupied/@Property.NumBeds Rooms Occupied
+                                                                                </div>
+                                                                                <div class="modal-body">
+                                                                                    <RadzenGrid @ref="gridIncome" AllowFiltering="false" AllowPaging="false" AllowSorting="true" RowRender="@RowRenderIncomeGrid" ExpandMode="DataGridExpandMode.Single"
+                                                                                    Data="@IncomeByRooms" TItem="RentalPropertyManagement.Models.IncomeByRoom">
+                                                                                        <Columns>
+                                                                                            <RadzenGridColumn Width="150px" TItem="RentalPropertyManagement.Models.IncomeByRoom" Property="Room" Title="Room">
+                                                                                                <Template Context="IncomeByRoom">
+                                                                                                    <div>@IncomeByRoom.Room</div>
+                                                                                                </Template>
+                                                                                                <FooterTemplate>
+                                                                                                    Total Income: <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", IncomeByRooms.Sum(x => x.Amount))</b>
+                                                                                                </FooterTemplate>
+                                                                                            </RadzenGridColumn>
+                                                                                            <RadzenGridColumn Width="150px" TItem="RentalPropertyManagement.Models.IncomeByRoom" Property="Amount" Title="Amount">
+                                                                                                <Template Context="IncomeByRoom">
+                                                                                                    <div>$@(String.Format("{0:0.##}", IncomeByRoom.Amount))</div>
+                                                                                                </Template>
+                                                                                            </RadzenGridColumn>
+                                                                                        </Columns>
+                                                                                        <Template Context="IncomeByRoom">
+                                                                                            <RadzenGrid @ref="incomeItemsGrid" AllowFiltering="false" AllowPaging="false" AllowSorting="false" Data="@IncomeByRoom.incomeByRooms"
+                                                                                            TItem="RentalPropertyManagement.Models.IncomeByRoom" EditMode="DataGridEditMode.Single" RowUpdate="@OnUpdateRowIncomeInnerGrid" RowCreate="@OnCreateRowIncomeInnerGrid">
+                                                                                                <Columns>
+
+                                                                                                    <RadzenGridColumn TItem="RentalPropertyManagement.Models.IncomeByRoom" Property="IncomeByRoom.Room" Title="Room">
+                                                                                                        <EditTemplate Context="IncomeByRoomI">
+                                                                                                            <RadzenTextBox @bind-Value="IncomeByRoomI.Room" Style="width:100%; display: block" Name="Room" />
+                                                                                                            <RadzenRequiredValidator Text="Room is required" Component="Room" Popup="true" />
+                                                                                                        </EditTemplate>
+                                                                                                    </RadzenGridColumn>
+                                                                                                    <RadzenGridColumn TItem="RentalPropertyManagement.Models.IncomeByRoom" Property="IncomeByRoom.Amount" Title="Amount">
+                                                                                                        <Template Context="IncomeByRoomContext">
+                                                                                                            $@(String.Format("{0:0.##}",IncomeByRoomContext.Amount))
+                                                                                                        </Template>
+                                                                                                        <EditTemplate Context="IncomeByRoomI">
+                                                                                                            <RadzenNumeric @bind-Value="IncomeByRoomI.Amount" Style="width:100%" Name="Amount" />
+                                                                                                            <RadzenRequiredValidator Text="Amount is required" Component="Amount" Popup="true" />
+                                                                                                        </EditTemplate>
+                                                                                                    </RadzenGridColumn>
+                                                                                                    <RadzenGridColumn TItem="RentalPropertyManagement.Models.IncomeByRoom" Property="IncomeByRoom.Description" Title="Description">
+                                                                                                        <EditTemplate Context="IncomeByRoomI">
+                                                                                                            <RadzenTextBox @bind-Value="IncomeByRoomI.Description" Style="width:100%" Name="Description" />
+                                                                                                        </EditTemplate>
+                                                                                                    </RadzenGridColumn>
+                                                                                                    <AuthorizeView Roles="Admin">
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.IncomeByRoom" Context="sampleBlazorModelsSampleOrder" Bubble="false"
+                                                                                                              Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                                                                                            <Template Context="IncomeByRoomI">
+                                                                                                                <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRowIncomeInnerGrid(IncomeByRoomI))">
+                                                                                                                </RadzenButton>
+                                                                                                            </Template>
+                                                                                                            <EditTemplate Context="IncomeByRoomI">
+                                                                                                                <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRowIncomeInnerGrid(IncomeByRoom, IncomeByRoomI))">
+                                                                                                                </RadzenButton>
+                                                                                                                <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEditIncomeInnerGrid(IncomeByRoomI))">
+                                                                                                                </RadzenButton>
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.IncomeByRoom" Context="order" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                                                                                                            <Template Context="IncomeByRoomI">
+                                                                                                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteRowIncomeInnerGrid(IncomeByRoomI))">
+                                                                                                                </RadzenButton>
+                                                                                                            </Template>
+                                                                                                            <EditTemplate Context="IncomeByRoomI">
+                                                                                                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteRowIncomeInnerGrid(IncomeByRoomI))">
+                                                                                                                </RadzenButton>
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                    </AuthorizeView>
+                                                                                                </Columns>
+                                                                                            </RadzenGrid>
+                                                                                        </Template>
+                                                                                    </RadzenGrid>
+                                                                                </div>
+
+                                                                            </div>
+                                                                            <div class="col-xl-6">
+                                                                                <div class="modal-body row">
+                                                                                    <div id="incomePieChart" style="height: 370px; width: 100%;"></div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+
+                                                                    else
+                                                                    {
+                                                                        <div class="modal-body row">
+                                                                            <div class="col-12">
+                                                                                <em>No data available for @Month, @Year</em>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+
+                                                                </BSCard>
+                                                            </BSCard>
+                                                        </div>
+                                                    </div> <!-- Income Card Row End -->
+                                                    <br />
+                                                    <br />
+                                                    <!-- Expense Card Row Begin -->
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <BSCard CardType="CardType.Card" Class="shadow">
+                                                                <BSCard CardType="CardType.Header">Expense</BSCard>
+                                                                <BSCard CardType="CardType.Body">
+                                                                    @if (ExpenseDataAvailable)
+                                                                    {
+                                                                        <div class="modal-body row">
+
+                                                                            <div class="col-xl-6">
+                                                                                <div class="modal-body">
+                                                                                    <RadzenGrid @ref="grid" AllowFiltering="false" AllowPaging="false" AllowSorting="true" RowRender="@RowRender" ExpandMode="DataGridExpandMode.Single"
+                                                                                    Data="@ExpenseByCategories" TItem="RentalPropertyManagement.Models.ExpenseByCategory">
+                                                                                        <Columns>
+                                                                                            <RadzenGridColumn Width="150px" TItem="RentalPropertyManagement.Models.ExpenseByCategory" Property="Category" Title="Category">
+                                                                                                <Template Context="ExpenseByCategory">
+                                                                                                    <div>@ExpenseByCategory.Category</div>
+                                                                                                </Template>
+                                                                                                <FooterTemplate>
+                                                                                                    Total Expense: <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", ExpenseByCategories.Sum(x => x.Amount))</b>
+                                                                                                </FooterTemplate>
+                                                                                            </RadzenGridColumn>
+                                                                                            <RadzenGridColumn Width="150px" TItem="RentalPropertyManagement.Models.ExpenseByCategory" Property="Amount" Title="Amount">
+                                                                                                <Template Context="ExpenseByCategory">
+                                                                                                    <div>$@(String.Format("{0:0.##}",ExpenseByCategory.Amount))</div>
+                                                                                                </Template>
+                                                                                            </RadzenGridColumn>
+                                                                                        </Columns>
+                                                                                        <Template Context="ExpenseByCategory">
+                                                                                            <RadzenCard Style="margin-bottom:20px">
+                                                                                                <RadzenGrid @ref="expenseItemsGrid" AllowFiltering="false" AllowPaging="false" AllowSorting="false" Data="@ExpenseByCategory.expenseItems.OrderBy(x => x.DateOfExpense)"
+                                                                                                TItem="RentalPropertyManagement.Models.ExpenseItem" EditMode="DataGridEditMode.Single" RowUpdate="@OnUpdateRow" RowCreate="@OnCreateRow">
+                                                                                                    <Columns>
+
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Property="ExpenseItem.Vendor" Title="Vendor">
+                                                                                                            <EditTemplate Context="ExpenseItem">
+                                                                                                                <RadzenTextBox @bind-Value="ExpenseItem.Vendor" Style="width:100%; display: block" Name="Vendor" />
+                                                                                                                <RadzenRequiredValidator Text="Vendor is required" Component="Vendor" Popup="true" />
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Property="ExpenseItem.DateOfExpense" Title="Date Of Expense">
+                                                                                                            <Template Context="ExpenseItem">
+                                                                                                                @String.Format("{0:d}", ExpenseItem.DateOfExpense)
+                                                                                                            </Template>
+                                                                                                            <EditTemplate Context="ExpenseItem">
+                                                                                                                <RadzenDatePicker @bind-Value="ExpenseItem.DateOfExpense" Style="width:100%" Name="DateOfExpense" />
+                                                                                                                <RadzenRequiredValidator Text="Date of Expense is required" Component="DateOfExpense" Popup="true" />
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Property="ExpenseItem.Amount" Title="Amount">
+                                                                                                            <Template Context="ExpenseItem">
+                                                                                                                $@(String.Format("{0:0.##}", ExpenseItem.Amount))
+                                                                                                            </Template>
+                                                                                                            <EditTemplate Context="ExpenseItem">
+                                                                                                                <RadzenNumeric @bind-Value="ExpenseItem.Amount" Style="width:100%" Name="Amount" />
+                                                                                                                <RadzenRequiredValidator Text="Amount is required" Component="Amount" Popup="true" />
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                        <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Property="ExpenseItem.Description" Title="Description">
+                                                                                                            <EditTemplate Context="ExpenseItem">
+                                                                                                                <RadzenTextBox @bind-Value="ExpenseItem.Description" Style="width:100%; display: block" Name="Description" />
+                                                                                                            </EditTemplate>
+                                                                                                        </RadzenGridColumn>
+                                                                                                        <AuthorizeView Roles="Admin">
+                                                                                                            <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Context="sampleBlazorModelsSampleOrder" Bubble="false"
+                                                                                                                  Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="100px">
+                                                                                                                <Template Context="ExpenseItem">
+                                                                                                                    <RadzenButton Icon="edit" Size="ButtonSize.Small" Click="@(args => EditRow(ExpenseItem))">
+                                                                                                                    </RadzenButton>
+                                                                                                                </Template>
+                                                                                                                <EditTemplate Context="ExpenseItem">
+                                                                                                                    <RadzenButton Icon="save" Size="ButtonSize.Small" Click="@((args) => SaveRow(ExpenseByCategory, ExpenseItem))">
+                                                                                                                    </RadzenButton>
+                                                                                                                    <RadzenButton Icon="cancel" Size="ButtonSize.Small" ButtonStyle="ButtonStyle.Secondary" Click="@((args) => CancelEdit(ExpenseItem))">
+                                                                                                                    </RadzenButton>
+                                                                                                                </EditTemplate>
+                                                                                                            </RadzenGridColumn>
+                                                                                                            <RadzenGridColumn TItem="RentalPropertyManagement.Models.ExpenseItem" Context="order" Bubble="false" Filterable="false" Sortable="false" TextAlign="TextAlign.Center" Width="70px">
+                                                                                                                <Template Context="ExpenseItem">
+                                                                                                                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteRow(ExpenseItem))">
+                                                                                                                    </RadzenButton>
+                                                                                                                </Template>
+                                                                                                                <EditTemplate Context="ExpenseItem">
+                                                                                                                    <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="close" Size="ButtonSize.Small" Click="@(args => DeleteRow(ExpenseItem))">
+                                                                                                                    </RadzenButton>
+                                                                                                                </EditTemplate>
+                                                                                                            </RadzenGridColumn>
+                                                                                                        </AuthorizeView>
+                                                                                                    </Columns>
+                                                                                                </RadzenGrid>
+                                                                                            </RadzenCard>
+                                                                                        </Template>
+                                                                                    </RadzenGrid>
+                                                                                </div>
+
+                                                                            </div>
+
+                                                                            <div class="col-xl-6">
+                                                                                <div class="modal-body row">
+                                                                                    <div id="expensePieChart" style="height: 370px; width: 100%;"></div>
+
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <div class="modal-body row">
+                                                                            <div class="col-12">
+                                                                                <em>No data available for @Month, @Year</em>
+                                                                            </div>
+                                                                        </div>
+                                                                    }
+                                                                </BSCard>
+                                                            </BSCard>
+                                                            <!-------------------------------------------------------------------------------------------------------------------------------------------->
+
+                                                </div>
+                                                    </div> <!-- Expense Card Row End -->
+                                                }
+
+                                            </BSCard>
+                                        }
+                                        else
+                                        {
+                                            <div class="modal-body row">
+                                                <div class="col-12">
+                                                    <div><em>No Data Available.</em></div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </BSCard>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </ContentTemplate>
+            </SpinLoader>
+        </div>
+
+        <BSModal @ref="VerticallyCentered" IsCentered="true">
+            @if (ExpenseByCategory != null)
+            {
+                <BSModalHeader OnClick="@ToggleModal">
+                    <div class="row">
+                        <div class="col-6">
+                            Month:
+                        </div>
+                        @if (Month.Equals("All months"))
+                        {
+                            <div class="col-6">
+                                All months
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="col-6">
+                                @ExpenseByCategory.Month
+                            </div>
+                        }
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Year:
+                        </div>
+                        <div class="col-6">
+                            @ExpenseByCategory.Year
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            Category:
+                        </div>
+                        <div class="col-6">
+                            @ExpenseByCategory.Category
+                        </div>
+                    </div>
+
+                </BSModalHeader>
+                <BSModalBody>
+                    @if (ExpenseItems != null)
+                    {
+                        int counter = 1;
+                        decimal total = 0;
+                        foreach (var item in ExpenseItems)
+                        {
+                            <div>--------------------------------&nbsp;@counter&nbsp;--------------------------------</div>
+                            <div>Vendor: @item.Vendor</div>
+                            <div>Date Of Expense: @item.DateOfExpense</div>
+                            <div>Amount: @item.Amount</div>
+                            <div>Description: @item.Description</div>
+                            counter++;
+                            total += item.Amount;
+                        }
+                        <br />
+                        <BSModalFooter>
+                            <div>Total @ExpenseByCategory.Category: <span style="font-weight:bold">@String.Format("{0:0.##}", total) </span></div>
+                        </BSModalFooter>
+                    }
+                </BSModalBody>
+            }
+        </BSModal>
+
+        <Confirm @ref="ConfirmRef" ConfirmationChanged="ConfirmDelete" ConfirmItems="ConfirmItems">
+
+        </Confirm>
+
+    </div>
+</div>
+

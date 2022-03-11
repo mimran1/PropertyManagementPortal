@@ -1,0 +1,9 @@
+Categories for Expenses:
+	i. Property Manager
+	ii. Labor
+	iii. Material
+	iv. Capital Improvments
+	v. Utilities
+	vi. Taxes
+	vii. Insurance
+	viii. Misc

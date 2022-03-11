@@ -1,0 +1,64 @@
+﻿@inherits LedgerGridComponentBase
+@using RentalPropertyManagement.Models
+
+@if (Property != null)
+{
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-end">
+                <RadzenButton Text="Excel" Icon="grid_on" Click="@(args => Export("excel"))" Style="margin-bottom:20px;box-shadow:0 .225rem .25rem 0 rgba(58,59,69,.2)!important" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <RadzenTabs Change=@OnTabClick>
+            <Tabs>
+                <RadzenTabsItem Text=Income style="text-decoration: none">
+                    <RadzenGrid Data="@IncomeByRooms" TItem="IncomeByRoom" AllowSorting="true" AllowFiltering="true" AllowColumnResize="true">
+                        <Columns>
+                            @if (Property.ID == -1)
+                            {
+                                <RadzenGridColumn TItem="IncomeByRoom" Property="ShortName" Title="Property" />
+                            }
+                            <RadzenGridColumn TItem="IncomeByRoom" Property="Year" Title="Year" Width="8%" />
+                            <RadzenGridColumn TItem="IncomeByRoom" Property="Month" Title="Month" Width="8%" />
+                            <RadzenGridColumn TItem="IncomeByRoom" Property="Room" Title="Room" Width="8%" />
+                            <RadzenGridColumn TItem="IncomeByRoom" Property="Amount" Title="Amount" Width="8%">
+                                <Template Context="IncomeByRoom">
+                                    @GetCellValue(IncomeByRoom.Amount)
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="IncomeByRoom" Property="Description" Title="Description" />
+                        </Columns>
+                    </RadzenGrid>
+                </RadzenTabsItem>
+                <RadzenTabsItem Text=Expense style="text-decoration: none">
+                    <RadzenGrid Data="@ExpenseItems" TItem="ExpenseItem" AllowSorting="true" AllowFiltering="true" AllowColumnResize="true">
+                        <Columns>
+                            @if (Property.ID == -1)
+                            {
+                                <RadzenGridColumn TItem="ExpenseItem" Property="ShortName" Title="Property" />
+                            }
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Vendor" Title="Vendor" Width="18%" />
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Year" Title="Year" Width="6%" />
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Month" Title="Month" Width="6%" />
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Category" Title="Category" Width="10%" />
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Amount" Title="Amount" Width="6%">
+                                <Template Context="ExpenseItem">
+                                    @GetCellValue(ExpenseItem.Amount)
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="ExpenseItem" Property="DateOfExpense" Title="DateOfExpense" Width="8%">
+                                <Template Context="data">
+                                    @String.Format("{0:d}", data.DateOfExpense)
+                                </Template>
+                            </RadzenGridColumn>
+                            <RadzenGridColumn TItem="ExpenseItem" Property="Description" Title="Description" />
+                        </Columns>
+                    </RadzenGrid>
+                </RadzenTabsItem>
+            </Tabs>
+        </RadzenTabs>
+    </div>
+
+}
