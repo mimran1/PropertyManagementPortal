@@ -26,4 +26,4 @@ Technologies Utilized:
   
 
 
-![Rental Property Management](Animation.gif)
+![Rental Property Management](Animation2.gif)
